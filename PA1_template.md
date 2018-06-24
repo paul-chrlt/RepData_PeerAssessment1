@@ -88,7 +88,7 @@ Plot the results
 
 
 ```r
-plot(stepsByInterval)
+plot(stepsByInterval,type="l")
 ```
 
 ![](PA1_template_files/figure-html/patternplot-1.png)<!-- -->

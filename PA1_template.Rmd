@@ -70,7 +70,7 @@ stepsByInterval <- aggregate(steps~interval,activitydata,mean,na.rm=TRUE)
 Plot the results
 
 ```{r patternplot}
-plot(stepsByInterval)
+plot(stepsByInterval,type="l")
 ```
 
 We see there is a high peak, we should find from which interval it comes from
