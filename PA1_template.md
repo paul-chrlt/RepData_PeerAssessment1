@@ -73,7 +73,7 @@ abline(v=meansteps,col="blue")
 abline(v=mediansteps,col="green",lty=2)
 ```
 
-![](assessement_files/figure-html/stepshist-1.png)<!-- -->
+![](PA1_template_files/figure-html/stepshist-1.png)<!-- -->
 
 ## What is the average daily activity pattern?
 
@@ -91,7 +91,7 @@ Plot the results
 plot(stepsByInterval)
 ```
 
-![](assessement_files/figure-html/patternplot-1.png)<!-- -->
+![](PA1_template_files/figure-html/patternplot-1.png)<!-- -->
 
 We see there is a high peak, we should find from which interval it comes from
 
@@ -145,7 +145,40 @@ medianstepsfilled <- median(stepsbydatefilled$steps)
 |with NAs data|1.0766189\times 10^{4}|10765|
 |with removed NAs data|1.0766189\times 10^{4}|1.0766189\times 10^{4}|
 
-We notice that the mean and median are mostly the same as before, because we populated the NAs based on the mean.
+We notice that the mean and median are mostly the same as before, because we populated the NAs based on the mean.  
+With another filling strategy, the results may have been slightly different.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
+We need to add a vector depending on the weekdays from the date column. My R program is configured in french, resulting on this test on weekdays with samedi and dimanche instead of saturday and sunday.
+
+
+```r
+for (i in 1:length(activitydatafilled$date)){
+        if (weekdays(activitydatafilled$date[i]) %in% c("samedi","dimanche")) {
+                activitydatafilled$week[i] <- "weekend"
+        }
+        else {
+                activitydatafilled$week[i] <- "weekday"
+        }
+}
+activitydatafilled$week <- as.factor(activitydatafilled$week)
+```
+
+We can now aggregate our data depending on the weekdays.
+
+
+```r
+datafilledaggregation <- aggregate(steps~interval+week,activitydatafilled,mean)
+```
+
+Based on this and using the ggplot2 library, we are now able to plot the data to visualize the pattern differences between week and weekend.
+
+
+```r
+library(ggplot2)
+plot <- ggplot(data=datafilledaggregation,aes(interval,steps)) + geom_line() + facet_grid(week~.)
+plot
+```
+
+![](PA1_template_files/figure-html/weekdaysplot-1.png)<!-- -->
